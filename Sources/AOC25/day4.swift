@@ -4,7 +4,6 @@
 //
 //  Created by Snow Kit on 04/12/2025.
 //
-import Foundation
 
 public class Day4: Day {
     let sequence: [Bool]

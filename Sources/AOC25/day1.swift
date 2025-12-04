@@ -4,7 +4,6 @@
 //
 //  Created by Snow Kit on 02/12/2025.
 //
-import Foundation
 
 public class Day1: Day {
     let sequence: [Int]
@@ -13,20 +12,39 @@ public class Day1: Day {
         self.sequence = try Day1.parseInput(data: data)
     }
     
-    private static func parseInput(data: [UInt8]) throws -> [Int] {
-        guard let text = String(bytes: data, encoding: .utf8) else {
-            throw PuzzleError.badInput
-        }
+    private static func parseInput(data: [UInt8]) throws -> [Int] {        
+        let nl: UInt8 = 0x0a
+        let zero: UInt8 = 0x30
+        let nine: UInt8 = 0x39
+        let l: UInt8 = 0x4c
+        let r: UInt8 = 0x52
         
         var parsed: [Int] = []
+        parsed.reserveCapacity(data.count/3) // Each line is at minimum 3 characters, but will be represented by 1 int
         
-        for var sub in text.split(separator: "\n") {
-            let multiplier = sub.hasPrefix("L") ? -1 : 1
-            sub.removeFirst()
-            guard let value = Int(sub) else {
-                throw PuzzleError.numberFormat
+        var multiplier: Int = 0
+        var num: Int = 0
+        
+        for char in data {
+            if char >= zero && char <= nine {
+                num = (num*10) + Int(char-zero)
+            } else {
+                switch char {
+                case nl:
+                    parsed.append(num * multiplier)
+                    num = 0
+                case r:
+                    multiplier = 1
+                case l:
+                    multiplier = -1
+                default:
+                    print("Unknown char \(char)")
+                }
             }
-            parsed.append(value*multiplier)
+        }
+        
+        if num != 0 {
+            parsed.append(num * multiplier)
         }
         
         return parsed

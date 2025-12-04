@@ -4,7 +4,18 @@
 //
 //  Created by Snow Kit on 02/12/2025.
 //
-import Foundation
+// Swift doesn't have a library for pow or log10 built in without foundation
+#if os(macOS) || os(iOS)
+import Darwin
+#elseif canImport(Musl)
+import Musl
+#elseif canImport(Glibc)
+import Glibc
+#elseif os(Windows)
+import ucrt
+#else
+#error("Unknown platform")
+#endif
 
 public class Day2: Day {
     let sequence: [PuzzleRange]
@@ -14,7 +25,7 @@ public class Day2: Day {
     }
     
     private static func parseInput(data: [UInt8]) throws -> [PuzzleRange] {
-        guard let text = String(bytes: data, encoding: .utf8) else {
+        guard let text = String(validating: data, as: UTF8.self) else {
             throw PuzzleError.badInput
         }
         
@@ -27,11 +38,11 @@ public class Day2: Day {
                 throw PuzzleError.badInput
             }
             
-            guard let min = Int(nums[0].trimmingCharacters(in: .whitespacesAndNewlines)) else {
+            guard let min = Int(nums[0].replacing("\n", with: "")) else {
                 throw PuzzleError.numberFormat
             }
             
-            guard let max = Int(nums[1].trimmingCharacters(in: .whitespacesAndNewlines)) else {
+            guard let max = Int(nums[1].replacing("\n", with: "")) else {
                 throw PuzzleError.numberFormat
             }
             

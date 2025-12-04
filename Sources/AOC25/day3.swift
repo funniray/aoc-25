@@ -4,29 +4,49 @@
 //
 //  Created by Snow Kit on 03/12/2025.
 //
-import Foundation
 
 public class Day3: Day {
-    let sequence: [[Int]]
+    let sequence: [ArraySlice<Int>]
     
     public required init(data: [UInt8]) throws {
         self.sequence = try Day3.parseInput(data: data)
     }
     
-    private static func parseInput(data: [UInt8]) throws -> [[Int]] {
-        guard let text = String(bytes: data, encoding: .utf8) else {
-            throw PuzzleError.badInput
+    private static func parseInput(data: [UInt8]) throws -> [ArraySlice<Int>] {
+        var parsed: [Int] = []
+        parsed.reserveCapacity(data.count)
+        
+        let nl: UInt8 = 0x0a
+        let zero: UInt8 = 0x30
+        let nine: UInt8 = 0x39
+        
+        var width = 0
+        var workingWidth = 0
+        
+        for char in data {
+            if char >= zero && char <= nine {
+                parsed.append(Int(char-zero))
+                workingWidth += 1
+            } else if char == nl {
+                if workingWidth == 0 {continue}
+                width = workingWidth
+                workingWidth = 0
+            } else {
+                print("Unknown char \(char)")
+            }
         }
         
-        var parsed: [[Int]] = []
+        var holder: [ArraySlice<Int>] = []
+        holder.reserveCapacity(parsed.count/width)
         
-        for line in text.split(separator: "\n") {
-            parsed.append(line.trimmingCharacters(in: .whitespacesAndNewlines).compactMap({Int(String($0))}))
+        for i in 0..<parsed.count/width {
+            holder.append(parsed[width*i..<width*(i+1)])
         }
         
-        return parsed
+        return holder
     }
     
+    @inline(__always)
     public static func getLargestSubline(line: ArraySlice<Int>, cur: Int, remaining: Int) -> Int {
         var largestNum = 0
         var index = 0
@@ -46,8 +66,9 @@ public class Day3: Day {
         }
     }
     
-    public static func getMaxForLine(line: [Int], _ len: Int) -> Int {
-        return Day3.getLargestSubline(line: line[0..<line.count], cur: 0, remaining: len-1)
+    @inline(__always)
+    public static func getMaxForLine(line: ArraySlice<Int>, _ len: Int) -> Int {
+        return Day3.getLargestSubline(line: line[line.startIndex..<line.endIndex], cur: 0, remaining: len-1)
     }
     
     public func part1() -> String {
