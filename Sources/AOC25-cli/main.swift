@@ -2,7 +2,7 @@
 // https://docs.swift.org/swift-book
 import AOC25
 
-var number = CommandLine.arguments.count > 1 ? Int(CommandLine.arguments[1]) : 4
+var number = CommandLine.arguments.count > 1 ? Int(CommandLine.arguments[1]) : 5
 
 
 do {
@@ -18,6 +18,7 @@ private func getDay(_ number: Int) throws -> Day {
     case 2: return try Day2(data: PackageResources.day_2_txt)
     case 3: return try Day3(data: PackageResources.day_3_txt)
     case 4: return try Day4(data: PackageResources.day_4_txt)
+    case 5: return try Day5(data: PackageResources.day_5_txt)
     default: throw PuzzleError.dayNotFound
     }
 }
