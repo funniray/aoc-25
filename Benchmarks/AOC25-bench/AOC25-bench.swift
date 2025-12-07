@@ -79,5 +79,20 @@ nonisolated(unsafe) let benchmarks = {
             let _ = day5.part2()
         }
     }
+    
+    Benchmark("Day6-Parse") { benchmark in
+        let _ = try! Day6(data: PackageResources.day_6_txt)
+    }
+    let day6 = try! Day6(data: PackageResources.day_6_txt)
+    Benchmark("Day6-Part1") { benchmark in
+        for _ in benchmark.scaledIterations {
+            let _ = day6.part1()
+        }
+    }
+    Benchmark("Day6-Part2") { benchmark in
+        for _ in benchmark.scaledIterations {
+            let _ = day6.part2()
+        }
+    }
     // Add additional benchmarks here
 }

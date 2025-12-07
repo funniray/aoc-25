@@ -26,7 +26,8 @@ let package = Package(
                 .embedInCode("../../Inputs/day-2.txt"),
                 .embedInCode("../../Inputs/day-3.txt"),
                 .embedInCode("../../Inputs/day-4.txt"),
-                .embedInCode("../../Inputs/day-5.txt")
+                .embedInCode("../../Inputs/day-5.txt"),
+                .embedInCode("../../Inputs/day-6.txt")
             ]),
     ]
 )
@@ -45,7 +46,8 @@ package.targets += [
             .embedInCode("../../Inputs/day-2.txt"),
             .embedInCode("../../Inputs/day-3.txt"),
             .embedInCode("../../Inputs/day-4.txt"),
-            .embedInCode("../../Inputs/day-5.txt")
+            .embedInCode("../../Inputs/day-5.txt"),
+            .embedInCode("../../Inputs/day-6.txt")
         ],
         plugins: [
             .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
